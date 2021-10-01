@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MovieService.Api.Models.Request;
 using MovieService.Api.Models.Response;
 using MovieService.Services.Abstractions;
 
@@ -20,27 +20,27 @@ namespace MovieService.Api.Controllers
         }
 
         [HttpGet("search")]
-        public Task<ActionResult<MovieResponse[]>> SearchMovieAsync([Required(AllowEmptyStrings = false)] string title)
+        public Task<ActionResult<MovieResponse[]>> SearchMovieAsync([FromQuery] SearchRequest request)
         {
-            return _movieService.SearchMovieAsync(title);
+            return _movieService.SearchMovieAsync(request.Title);
         }
 
         [HttpPost("save")]
-        public Task<ActionResult> SaveMovieAsync([Required] int userId, [Required(AllowEmptyStrings = false)] string movieId)
+        public Task<ActionResult> SaveMovieAsync([FromQuery] MovieRequest request)
         {
-            return _movieService.SaveMovieAsync(userId, movieId);
+            return _movieService.SaveMovieAsync(request.UserId, request.MovieId);
         }
 
         [HttpGet("saved-movies")]
-        public Task<ActionResult<SavedMovieResponse[]>> GetSavedMoviesAsync([Required(AllowEmptyStrings = false)] int userId)
+        public Task<ActionResult<SavedMovieResponse[]>> GetSavedMoviesAsync([FromQuery] GetSavedMoviesRequest request)
         {
-            return _movieService.GetSavedMoviesAsync(userId);
+            return _movieService.GetSavedMoviesAsync(request.UserId);
         }
 
         [HttpPost("mark-as-watched")]
-        public Task MarkMovieAsWatchedAsync([Required] int userId, [Required(AllowEmptyStrings = false)] string movieId)
+        public Task MarkMovieAsWatchedAsync([FromQuery] MovieRequest request)
         {
-            return _movieService.MarkMovieAsWatchedAsync(userId, movieId);
+            return _movieService.MarkMovieAsWatchedAsync(request.UserId, request.MovieId);
         }
     }
 }
